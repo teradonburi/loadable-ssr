@@ -1,7 +1,6 @@
 import path from 'path'
 import nodeExternals from 'webpack-node-externals'
 import LoadablePlugin from '@loadable/webpack-plugin'
-import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 
 const DIST_PATH = path.resolve(__dirname, 'public/dist')
 const production = process.env.NODE_ENV === 'production'
@@ -25,15 +24,6 @@ const getConfig = target => ({
           },
         },
       },
-      {
-        test: /\.css$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-          },
-          'css-loader',
-        ],
-      },
     ],
   },
   externals:
@@ -44,7 +34,7 @@ const getConfig = target => ({
     publicPath: `/dist/${target}/`,
     libraryTarget: target === 'node' ? 'commonjs2' : undefined,
   },
-  plugins: [new LoadablePlugin(), new MiniCssExtractPlugin()],
+  plugins: [new LoadablePlugin()],
 })
 
 export default [getConfig('web'), getConfig('node')]

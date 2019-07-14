@@ -4,7 +4,7 @@
     "dev": "nodemon src/server/server.js",
     "build": "NODE_ENV=production yarn build:webpack",
     "build:webpack": "webpack",
-    "start": "NODE_ENV=production nodemon src/server/server.js"
+    "start": "NODE_ENV=production babel-node --config-file ./babel.server.js src/server/server.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",

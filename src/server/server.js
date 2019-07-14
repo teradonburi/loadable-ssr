@@ -2,14 +2,15 @@ import path from 'path'
 import express from 'express'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
-import { ChunkExtractor } from '@loadable/server'
+import { ChunkExtractorManager, ChunkExtractor } from '@loadable/server'
 
 const app = express()
 
 app.use(express.static(path.join(__dirname, '../../public')))
 
+
 if (process.env.NODE_ENV !== 'production') {
-  const { default: webpackConfig } = require('../../webpack.config')
+  const webpackConfig = require('../../webpack.config')
   const webpackDevMiddleware = require('webpack-dev-middleware')
   const webpack = require('webpack')
 
@@ -25,6 +26,7 @@ if (process.env.NODE_ENV !== 'production') {
     }),
   )
 }
+
 
 const nodeStats = path.resolve(
   __dirname,
@@ -43,9 +45,12 @@ app.get(
     const { default: App } = nodeExtractor.requireEntrypoint()
 
     const webExtractor = new ChunkExtractor({ statsFile: webStats })
-    const jsx = webExtractor.collectChunks(<App />)
 
-    const html = renderToString(jsx)
+    const html = renderToString(
+      <ChunkExtractorManager extractor={webExtractor}>
+        <App />
+      </ChunkExtractorManager>
+    )
 
     res.set('content-type', 'text/html')
     res.send(`<!DOCTYPE html>

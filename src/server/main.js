@@ -9,11 +9,9 @@ const app = express()
 app.use(express.static(path.join(__dirname, '../../public')))
 
 if (process.env.NODE_ENV !== 'production') {
-  /* eslint-disable global-require, import/no-extraneous-dependencies */
-  const { default: webpackConfig } = require('../../webpack.config.babel')
+  const { default: webpackConfig } = require('../../webpack.config')
   const webpackDevMiddleware = require('webpack-dev-middleware')
   const webpack = require('webpack')
-  /* eslint-enable global-require, import/no-extraneous-dependencies */
 
   const compiler = webpack(webpackConfig)
 
